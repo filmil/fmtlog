@@ -25,11 +25,11 @@ func TestFmtLog(t *testing.T) {
 	}{
 		{
 			name:   "basic",
-			stdout: "hello world",
-			stderr: "hello error",
+			stdout: "hello world\n",
+			stderr: "hello error\n",
 			cfg: Config{
-				OutFmt: "[stdout]{{.Text}}",
-				ErrFmt: "[error]{{.Text}}",
+				OutFmt: "[stdout]{{.Text}}{{n}}",
+				ErrFmt: "[error]{{.Text}}{{n}}",
 				Args:   []string{os.Args[0], "--test.run=TestHelperProcess", "--"},
 			},
 			expectedOut: "[stdout]hello world\n",
@@ -49,7 +49,7 @@ func TestFmtLog(t *testing.T) {
 				outBuf, errBuf strbuild
 			)
 
-			err := Run(test.cfg, &outBuf, &errBuf)
+			err := test.cfg.Run(&outBuf, &errBuf)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
